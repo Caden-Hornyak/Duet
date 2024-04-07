@@ -38,4 +38,4 @@ yarn-error.*
 /static
 
 #venv
-/duet_venv
+/venv
