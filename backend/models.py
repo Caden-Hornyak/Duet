@@ -21,3 +21,21 @@ class UserProfile(models.Model):
     def __str__(self):
         return str(self.user)
     
+class Chat(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=50, null=True, blank=True)
+    members = models.ManyToManyField('UserProfile')
+    messages = models.ManyToManyField('Message')
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+class Message(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    text = models.TextField()
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.message[:25] + '...'
+    
