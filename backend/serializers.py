@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from .models import UserProfile, Descriptor, User
+from .models import (UserProfile, Descriptor, User, Chat, Message)
 from rest_framework import serializers
 import sys
 
@@ -34,5 +34,26 @@ class UserProfileSingleSerializer(ModelSerializer):
                 return user.username
             else:
                 return None
+        except:
+            return None
+
+
+class MessageSerializer(ModelSerializer):
+    class Meta:
+        model = Message
+        include = '__all__'
+
+class ChatSerializer(ModelSerializer):
+    messages = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Chat
+        include = '__all__'
+
+    def get_messages(self, instance):
+        try:
+            recent_messages = instance.messages[:10]
+            serializer = MessageSerializer(recent_messages, many=True)
+            return serializer.data
         except:
             return None
