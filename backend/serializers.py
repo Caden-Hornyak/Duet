@@ -18,7 +18,7 @@ class UserProfileListSerializer(ModelSerializer):
     
     class Meta:
         model = UserProfile
-        exclude = ['user', 'friends', 'biography']
+        exclude = ['user', 'friends', 'biography', 'chats']
 
 class UserProfileSingleSerializer(ModelSerializer):
     username = serializers.SerializerMethodField()
@@ -41,18 +41,19 @@ class UserProfileSingleSerializer(ModelSerializer):
 class MessageSerializer(ModelSerializer):
     class Meta:
         model = Message
-        include = '__all__'
+        fields = '__all__'
 
 class ChatSerializer(ModelSerializer):
     messages = serializers.SerializerMethodField()
+    members = UserProfileListSerializer(many=True)
 
     class Meta:
         model = Chat
-        include = '__all__'
+        fields = '__all__'
 
     def get_messages(self, instance):
         try:
-            recent_messages = instance.messages[:10]
+            recent_messages = instance.messages.all()[:10]
             serializer = MessageSerializer(recent_messages, many=True)
             return serializer.data
         except:

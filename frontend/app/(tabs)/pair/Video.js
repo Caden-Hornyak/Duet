@@ -13,7 +13,6 @@ const Video = () => {
     let getPermission = async () => {
       const cameraPermission = await Camera.requestCameraPermissionsAsync();
       const audioPermission = await Camera.requestMicrophonePermissionsAsync();
-      console.log(cameraPermission, audioPermission)
     } 
     getPermission()
   }, [])

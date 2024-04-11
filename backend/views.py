@@ -14,19 +14,16 @@ class UserProfileView(APIView):
         try:
             context = {'request': request}
             # assume getting friends
-            if id == None:
+            if not id:
+                user = self.request.user
+                user_profile = UserProfile.objects.get(user=user)
+                serializer = UserProfileSingleSerializer(user_profile, context=context)
+                serializer.data['username'] = user.username
+                return Response(serializer.data)
+            elif id == 'friends':
                 user = self.request.user
                 current_user = UserProfile.objects.get(user=user)
                 serializer = UserProfileListSerializer(current_user.friends, many=True, context=context)
-                return Response(serializer.data)
-            elif id == 'self':
-                try:
-                    user = self.request.user
-                    user_profile = UserProfile.objects.get(user=user)
-                    serializer = UserProfileSingleSerializer(user_profile, context=context)
-                    serializer.data['username'] = user.username
-                except Exception as e:
-                    print(e, file=sys.stderr)
                 return Response(serializer.data)
             else:
                 user_profile = UserProfile.objects.get(id=id)
@@ -45,7 +42,7 @@ class ChatView(APIView):
             if not id:
                 user = self.request.user
                 user_profile = UserProfile.objects.get(user=user)
-                recent_chats = user_profile.chats[:10]
+                recent_chats = user_profile.chats.all()[:10]
                 serializer = self.serializer(recent_chats, many=True)
                 return Response(serializer.data)
             else:

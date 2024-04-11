@@ -26,7 +26,7 @@ export const defaultAjax = async ({
     try {
 
         let body;
-        if (action === 'post') {
+        if (action !== 'get') {
             if (stringify) {
                 body = JSON.stringify(actionBody);
             } else {

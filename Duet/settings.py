@@ -195,4 +195,6 @@ CHANNEL_LAYERS = {
     }
 }
 
-ALLOWED_HOSTS = ['192.168.0.109',]
+ALLOWED_HOSTS = ['192.168.0.109',
+                 'localhost'
+                 ]

@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Text, View, Image, SafeAreaView, StyleSheet, TouchableOpacity } from 'react-native';
 import { Skeleton } from 'moti/skeleton';
 import { defaultAjax } from '../../../components/utility/CommonFunctions';
 import camelize from 'camelize';
 import { Redirect } from 'expo-router';
+import UserInformationContext from '../../../components/utility/UserInformationContext';
 
 const SkeletonCommonProps =  (position) => {
   return {
@@ -16,32 +17,13 @@ const SkeletonCommonProps =  (position) => {
   }
 }
 
-const Profile = ({user='self'}) => {
+const Profile = () => {
 
   let [redir, setRedir] = useState(null)
-  let [userProfile, setUserProfile] = useState(null);
+  let { userProfile } = useContext(UserInformationContext)
   let tags = ['Beginner', 'Piano', 'Classical Music', 'Chopin', 'Liszt', 'Rachmaninoff']
-
-  useEffect(() => {
-    let test = async () => {
-      let res = await defaultAjax({ 
-        action: 'get', 
-        url: `userprofile/${user}`
-      });
-      console.log(res)
-      if (res.error) {
-        
-        // handle error
-      } else if (res.reauthenticate) {
-        setRedir('/')
-      } else {
-        console.log("HI")
-        setUserProfile(camelize(res))
-      }
-    }
-    
-    test()
-  }, [])
+  //else if (res.reauthenticate) {
+    //setRedir('/')
 
   return (
     <SafeAreaView >

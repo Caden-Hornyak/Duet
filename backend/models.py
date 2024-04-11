@@ -45,5 +45,5 @@ class Message(models.Model):
         ordering = ['-date_created']
 
     def __str__(self):
-        return self.message[:25] + '...'
+        return self.text[:25] + '...'
     
