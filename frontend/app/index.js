@@ -1,7 +1,6 @@
 import { View, Text } from 'react-native';
 import { Redirect } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import UserContext from '../components/utility/UserContext';
 import * as SecureStore from 'expo-secure-store';
 import { jwtDecode } from 'jwt-decode';
 import "core-js/stable/atob";

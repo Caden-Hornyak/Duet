@@ -1,4 +1,3 @@
-import { Provider } from 'react-redux';
 import React from 'react';
 import { Tabs } from 'expo-router';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -15,10 +14,7 @@ const RootLayout = () => {
         <Stack.Screen name="(authentication)" options={{
           headerShown: false
         }}/>
-        <Stack.Screen name="message/[id]" options={{
-          gestureDirection: 'horizontal',
-          gestureResponseDistance: 100,
-          gestureVelocityImpact: 0
+        <Stack.Screen name="message" options={{
         }}/>
       </Stack>
     </UserInformationProvider>

@@ -14,7 +14,7 @@ class UserProfile(models.Model):
     biography = models.CharField(max_length=255)
     public_name = models.CharField(max_length=30)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_picture = models.ImageField(upload_to='images/')
+    profile_picture = models.ImageField(upload_to='images/', null=True, blank=True)
     friends = models.ManyToManyField('self', blank=True)
     description_tags = models.ForeignKey('Descriptor', null=True, blank=True, on_delete=models.PROTECT)
 
@@ -37,6 +37,7 @@ class Chat(models.Model):
         return self.name
 
 class Message(models.Model):
+    writer = models.ForeignKey('UserProfile', on_delete=models.PROTECT)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     text = models.TextField()
     date_created = models.DateTimeField(auto_now_add=True)

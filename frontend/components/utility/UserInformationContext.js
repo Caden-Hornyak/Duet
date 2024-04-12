@@ -43,7 +43,7 @@ export const UserInformationProvider = ({ children }) => {
                 });
             }
 
-            console.log('CLIENT Connected to server');
+            console.log('CLIENT Connected to server', profileRes);
         });
 
         socket.on('disconnect', () => {
@@ -73,7 +73,7 @@ export const UserInformationProvider = ({ children }) => {
     }, []);
 
     return (
-        <UserInformationContext.Provider value={{ userProfile, chats }}>
+        <UserInformationContext.Provider value={{ userProfile, chats, setChats }}>
             {children}
         </UserInformationContext.Provider>
     );

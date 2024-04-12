@@ -2,7 +2,7 @@ import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity } from 'react
 import React, { useContext } from 'react'
 import UserInformationContext from '../../../components/utility/UserInformationContext';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Link, router } from 'expo-router';
+import { Link } from 'expo-router';
 
 
 const Chats = () => {

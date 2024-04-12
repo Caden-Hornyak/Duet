@@ -22,6 +22,7 @@ class UserProfileListSerializer(ModelSerializer):
 
 class UserProfileSingleSerializer(ModelSerializer):
     username = serializers.SerializerMethodField()
+    friends = UserProfileListSerializer(many=True)
 
     class Meta:
         model = UserProfile

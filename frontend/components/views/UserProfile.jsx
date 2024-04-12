@@ -1,33 +1,30 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Text, View, Image, SafeAreaView, StyleSheet, TouchableOpacity } from 'react-native';
 import { Skeleton } from 'moti/skeleton';
-import { defaultAjax } from '../../../components/utility/CommonFunctions';
-import camelize from 'camelize';
 import { Redirect } from 'expo-router';
-import UserInformationContext from '../../../components/utility/UserInformationContext';
+import { Link } from 'expo-router';
 
-const SkeletonCommonProps =  (position) => {
+const SkeletonCommonProps =  () => {
   return {
     colorMode: 'light',
     transition: {
       type: 'timing',
-      duration: 2000 + (100000 * position),
+      duration: 2000,
     },
     backgroundColor: '#000000'
   }
 }
 
-const Profile = () => {
+const UserProfile = ({ userProfile }) => {
 
-  let [redir, setRedir] = useState(null)
-  let { userProfile } = useContext(UserInformationContext)
-  let tags = ['Beginner', 'Piano', 'Classical Music', 'Chopin', 'Liszt', 'Rachmaninoff']
+  let [redir, setRedir] = useState(null);
+  let tags = ['Beginner', 'Piano', 'Classical Music', 'Chopin', 'Liszt', 'Rachmaninoff'];
   //else if (res.reauthenticate) {
     //setRedir('/')
 
   return (
     <SafeAreaView >
-      <Skeleton.Group show={false}>
+      <Skeleton.Group show={!userProfile}>
       {redir && <Redirect href={redir} />}
       <View style={{marginBottom: 20}}>
         <View style={styles.profilePictureWrapper}>
@@ -52,7 +49,14 @@ const Profile = () => {
         </View>}
        
           
-        {userProfile && <Text>Friends {userProfile.friends.length}</Text>}
+        {(userProfile && userProfile.friends) &&
+        <Link href={"/(tabs)/profile/FriendList"}
+            asChild>
+            <TouchableOpacity>
+                <Text>Friends {userProfile.friends.length}</Text>
+            </TouchableOpacity> 
+            </Link>
+        }
       </View>
 
       <View style={styles.aboutMeWrapper}>
@@ -154,4 +158,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Profile
+export default UserProfile

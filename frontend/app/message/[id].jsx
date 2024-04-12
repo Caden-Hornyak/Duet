@@ -1,35 +1,66 @@
+import 'react-native-get-random-values';
 import React, {useEffect, useState, useContext} from 'react'
 import { Text, View, TextInput, TouchableOpacity, StyleSheet, 
   SafeAreaView, FlatList } from 'react-native';
 import UserInformationContext from '../../components/utility/UserInformationContext';
+import { defaultAjax } from '../../components/utility/CommonFunctions';
 import { useLocalSearchParams } from 'expo-router';
+import { v4 as uuidv4 } from 'uuid';
 
 const Message = () => {
 
   const { id } = useLocalSearchParams();
 
-  const [currMessage, setCurrMessage] = useState({});
-  const { chats } = useContext(UserInformationContext);
+  const [currMessage, setCurrMessage] = useState('');
+  const [newMessages, setNewMessages] = useState([]);
+  const { userProfile, chats, setChats } = useContext(UserInformationContext);
 
   const submitMessage = async () => {
     if (currMessage.length > 0) {
       const message = currMessage;
       setCurrMessage('');
+      
+      // set placeholder
+      const messageId = uuidv4();
+      setChats(prevState => {
+        const newState = [{text: message, id: messageId, writer: userProfile.id}, ...prevState[id].messages]
+
+        // update specific chats messages
+        return {...prevState, [id]: {...prevState[id], messages: newState}}
+      }
+        
+      );
+
 
       let res = await defaultAjax({
         action: 'post', 
-        url: 'token/', 
-        actionBody: formData, 
+        url: 'message/', 
+        actionBody: { 'message': message, 'chat': chats[id].id}, 
         stringify: false, 
-        includeToken: false, 
-        retry: false
       });
+
+      if (!res.error) {
+        setChats(prevState => {
+          const newState = [...prevState[id].messages];
+          for (let i = 0; i < newState.length; i++) {
+            if (newState[i].id === messageId) {
+              console.log('res: ', res)
+              newState[i] = res;
+            }
+          }
+          return {...prevState, [id]: {...prevState[id], messages: newState}};
+        });
+      }
     }
   };
-
-  const renderItem = ({ item }) => {
+  useEffect(() => {
+    console.log("CHATS: ", chats)
+  }, [chats])
+  const renderItem = ({ item }) => {  
+    const selfSent = userProfile.id === item.writer;
     return (
-      <View>
+      <View style={[styles.message, {backgroundColor: selfSent ? 'red': 'grey',
+      alignSelf: selfSent ? 'flex-end': 'flex-start'}]}>
         <Text>{item.text}</Text>
       </View>
     );
@@ -49,6 +80,7 @@ const Message = () => {
         <View style={styles.bottomBlock}>
           <TextInput
             placeholder="Message..."
+            value={currMessage}
             onChangeText={text => setCurrMessage(text)}
             style={styles.textInput}
           />
@@ -79,5 +111,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 50,
     flex: 1
+  },
+  message: {
+    padding: 20,
+    borderRadius: 50,
+    marginBottom: 20,
+    marginHorizontal: 10
   }
 });
