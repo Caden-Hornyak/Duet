@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import UserInformationContext from '../../../components/utility/UserInformationContext';
 import UserProfile from '../../../components/views/UserProfile';
 import { useLocalSearchParams } from 'expo-router';
+import { defaultAjax } from '../../../components/utility/CommonFunctions';
+import camelize from 'camelize';
 
 const Profile = () => {
 
@@ -14,10 +16,12 @@ const Profile = () => {
                 action: 'get', 
                 url: `userprofile/${id}`, 
             });
-            setUserProfile(res);
+            setUserProfile(camelize(res));
         };
         getProfile();
     }, []);
+
+    console.log(userProfile)
 
   return (
     <UserProfile userProfile={userProfile} />

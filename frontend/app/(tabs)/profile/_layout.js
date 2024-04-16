@@ -5,10 +5,12 @@ const RootLayout = () => {
   return (
     <Stack>
         <Stack.Screen name="PersonalProfile" options={{
-          headerShown: false
+          headerShown: false,
+          title: 'Profile'
         }}/>
         <Stack.Screen name="[id]" options={{
-          headerShown: false
+          headerShown: false,
+
         }}/>
     </Stack>
   )

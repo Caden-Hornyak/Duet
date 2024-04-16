@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
+from django.utils import timezone
 
 # Create your models here.
 class Descriptor(models.Model):
@@ -40,11 +41,16 @@ class Message(models.Model):
     writer = models.ForeignKey('UserProfile', on_delete=models.PROTECT)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     text = models.TextField()
-    date_created = models.DateTimeField(auto_now_add=True)
+    date_created = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ['-date_created']
 
     def __str__(self):
         return self.text[:25] + '...'
+    
+
+class Notification(models.Model):
+    chat = models.OneToOneField('Chat', on_delete=models.PROTECT)
+    users = models.ManyToManyField('UserProfile')
     

@@ -12,8 +12,11 @@ urlpatterns = [
     path('chat/<str:id>', ChatView.as_view()),
     path('chat/', ChatView.as_view()),
 
-    path('message/<str:id>', MessageView.as_view()),
+    path('message/<str:chat_id>/<int:start>/<int:end>/', MessageView.as_view()),
     path('message/', MessageView.as_view()),
+
+    path('notification/<str:type>/', MessageView.as_view()),
+    path('notification/', MessageView.as_view()),
 
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

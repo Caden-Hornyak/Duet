@@ -18,7 +18,7 @@ const SkeletonCommonProps =  () => {
 const UserProfile = ({ userProfile }) => {
 
   let [redir, setRedir] = useState(null);
-  let tags = ['Beginner', 'Piano', 'Classical Music', 'Chopin', 'Liszt', 'Rachmaninoff'];
+
   //else if (res.reauthenticate) {
     //setRedir('/')
 
@@ -31,6 +31,14 @@ const UserProfile = ({ userProfile }) => {
           <Skeleton {...SkeletonCommonProps(0)} radius={'round'} width={220} height={220}>
           {userProfile && <Image source={{ uri: userProfile.profilePicture }} 
             style={styles.profilePicture} />}
+            {(userProfile && userProfile.friends) &&
+            <Link href={"/(tabs)/profile/FriendList"}
+              asChild>
+              <TouchableOpacity style={styles.friendWrapper}>
+                <Text style={{fontSize: 20, color: 'black'}}>Friends {userProfile.friends.length}</Text>
+              </TouchableOpacity> 
+            </Link>
+        }
           </Skeleton>
         </View>
         
@@ -48,35 +56,30 @@ const UserProfile = ({ userProfile }) => {
           </Skeleton>
         </View>}
        
-          
-        {(userProfile && userProfile.friends) &&
-        <Link href={"/(tabs)/profile/FriendList"}
-            asChild>
-            <TouchableOpacity>
-                <Text>Friends {userProfile.friends.length}</Text>
-            </TouchableOpacity> 
-            </Link>
-        }
       </View>
 
+      {((userProfile && userProfile.biography) || !userProfile) &&
       <View style={styles.aboutMeWrapper}>
         <Skeleton height={135} width={350} {...SkeletonCommonProps(2)}>
           <View style={styles.bottomSection}>
             <Text style={styles.h3}>About me</Text>
-            <Text style={[styles.description]}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor.
-            </Text>
+            {userProfile && 
+            <Text style={[styles.description]}>
+              {userProfile.biography}
+            </Text>}
           </View>
         </Skeleton>
-      </View>
+      </View>}
       
+      {((userProfile && userProfile.descriptionTags) || !userProfile) &&
       <View style={styles.tagWrapper}>
         <Skeleton height={135} width={350} {...SkeletonCommonProps(3)}>
           <View style={styles.bottomSection}>
             <Text style={styles.h3}>Tags</Text>
 
             <View style={styles.tagInsideWrapper}>
-              {
-                tags.map((tag) => {
+                {userProfile &&
+                userProfile.descriptionTags.map((tag) => {
                   return (
                     <TouchableOpacity
                       onPress={() => console.log("Clicked")}
@@ -89,12 +92,11 @@ const UserProfile = ({ userProfile }) => {
                       <Text style={{fontSize: 14}}>{tag}</Text>
                     </TouchableOpacity>
                   )
-                })
-              }
+                })}
             </View>
           </View>
         </Skeleton>
-      </View>
+      </View>}
       </Skeleton.Group>
     </SafeAreaView>
   )
@@ -155,6 +157,14 @@ const styles = StyleSheet.create({
   },
   text: {
     textAlign: 'center'
+  },
+  friendWrapper: {
+    position: 'absolute', 
+    alignSelf: 'center', 
+    bottom: 0, 
+    backgroundColor: 'rgba(255, 255, 255, 0.5)', 
+    borderRadius: 20,
+    padding: 5
   }
 });
 

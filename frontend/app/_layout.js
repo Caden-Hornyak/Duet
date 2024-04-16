@@ -9,12 +9,12 @@ const RootLayout = () => {
     <UserInformationProvider>
       <Stack>
         <Stack.Screen name="(tabs)" options={{
-          headerShown: false
+          headerShown: false,
         }}/>
         <Stack.Screen name="(authentication)" options={{
           headerShown: false
         }}/>
-        <Stack.Screen name="message" options={{
+        <Stack.Screen name="message/[id]" options={{
         }}/>
       </Stack>
     </UserInformationProvider>

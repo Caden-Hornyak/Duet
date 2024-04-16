@@ -50,6 +50,7 @@ export const defaultAjax = async ({
         return res.data;
 
     } catch (err) {   
+
         // Token has expired
         if (retry && err.response.status === 401) {
             

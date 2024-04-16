@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from .models import (UserProfile, Descriptor, User, Chat, Message)
+from .models import (UserProfile, Descriptor, User, Chat, Message, Notification)
 from rest_framework import serializers
 import sys
 
@@ -26,7 +26,7 @@ class UserProfileSingleSerializer(ModelSerializer):
 
     class Meta:
         model = UserProfile
-        exclude = ['user']
+        exclude = ['user', 'chats']
     
     def get_username(self, instance):
         try:
@@ -46,6 +46,7 @@ class MessageSerializer(ModelSerializer):
 
 class ChatSerializer(ModelSerializer):
     messages = serializers.SerializerMethodField()
+    notification = serializers.SerializerMethodField()
     members = UserProfileListSerializer(many=True)
 
     class Meta:
@@ -54,8 +55,21 @@ class ChatSerializer(ModelSerializer):
 
     def get_messages(self, instance):
         try:
-            recent_messages = instance.messages.all()[:10]
+            recent_messages = instance.messages.all()[:20]
             serializer = MessageSerializer(recent_messages, many=True)
             return serializer.data
         except:
             return None
+        
+    def get_notification(self, instance):
+        try:
+            notification = Notification.objects.get(chat=instance)
+
+            user = self.context.get('request').user
+            user_profile = UserProfile.objects.get(user=user)
+
+            return user_profile in notification.users
+        except:
+            return False
+
+        

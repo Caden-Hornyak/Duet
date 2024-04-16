@@ -8,7 +8,7 @@ const UserList = ({users}) => {
 
   let renderUserItems = ({ item }) => {
     return (
-      <Link href={{
+      <Link push href={{
         pathname: "/(tabs)/profile/[id]",
         params: { id: item.id }
         }}
@@ -21,14 +21,14 @@ const UserList = ({users}) => {
               <Text style={styles.username}>
                 {item.publicName}
               </Text>
-              <MaterialIcons name="keyboard-arrow-right" size={40} color="black" style={{alignSelf: 'center', marginLeft: 'auto'}}/>
+              {/* <MaterialIcons name="keyboard-arrow-right" size={40} color="black" style={{alignSelf: 'center', marginLeft: 'auto'}}/> */}
             </View>
           </View>
         </TouchableOpacity>
       </Link>
     );
   }
-
+  
   return (
       <FlatList
       data={users}
